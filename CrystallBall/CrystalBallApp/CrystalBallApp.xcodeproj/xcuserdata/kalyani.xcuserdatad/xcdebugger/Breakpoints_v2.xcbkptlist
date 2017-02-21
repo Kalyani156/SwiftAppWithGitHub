@@ -23,13 +23,13 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "CrystalBallApp/LinkedApplicationsController.swift"
-            timestampString = "509290914.077301"
+            filePath = "CrystalBallApp/JoinNowController.swift"
+            timestampString = "509359047.931472"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "202"
-            endingLineNumber = "202"
-            landmarkName = "getAllCrystalBallLinkedApplications(completion:)"
+            startingLineNumber = "33"
+            endingLineNumber = "33"
+            landmarkName = "viewDidLoad()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
