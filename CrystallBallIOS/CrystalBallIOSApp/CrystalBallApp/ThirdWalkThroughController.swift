@@ -22,14 +22,14 @@ class ThirdWalkThroughController: UIViewController {
     
     @IBOutlet weak var passwordLabel: UILabel!
     
-
-    let verifyCredentialsURL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/verifyCredentials"
+    let VERIFY_CREDENTIALS_URL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/verifyCredentials"
     
-    var linkedAllApplicationsStoryBoardID = "LinkedAppID"
+    let LINKED_ALL_APPLICATIONS_STORYBOARD_ID = "LinkedAppID"
     
-    var joinNowStoryBoardID = "JoinNowID"
+    let JOIN_NOW_STORYBOARD_ID = "JoinNowID"
     
-    var signInStoryBoardID = "SignInID"
+    let SIGN_IN_SCREEN_STORYBOARD_ID = "SignInID"
+   
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,7 +42,7 @@ class ThirdWalkThroughController: UIViewController {
         OperationQueue.main.addOperation
             {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let viewController = storyboard.instantiateViewController(withIdentifier : self.joinNowStoryBoardID) as! JoinNowController
+                let viewController = storyboard.instantiateViewController(withIdentifier : self.JOIN_NOW_STORYBOARD_ID) as! JoinNowController
                 self.present(viewController, animated: true)
                 
         }
@@ -53,7 +53,7 @@ class ThirdWalkThroughController: UIViewController {
         OperationQueue.main.addOperation
             {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let viewController = storyboard.instantiateViewController(withIdentifier : self.signInStoryBoardID) as! LoginController
+                let viewController = storyboard.instantiateViewController(withIdentifier : self.SIGN_IN_SCREEN_STORYBOARD_ID) as! LoginController
                 self.present(viewController, animated: true)
                 
         }
@@ -79,7 +79,7 @@ class ThirdWalkThroughController: UIViewController {
             passwordLabel.text = ""
             let jsonLoginParams = ["username":"\(userName.text!)" , "password":"\(password.text!)"]
             let jsonData = try! JSONSerialization.data(withJSONObject: jsonLoginParams, options: .prettyPrinted)
-            var request = URLRequest(url: URL(string: verifyCredentialsURL)!)
+            var request = URLRequest(url: URL(string: VERIFY_CREDENTIALS_URL)!)
             request.httpMethod = "POST"
             request.httpBody = jsonData
             request.setValue("application/json; charset=utf-8", forHTTPHeaderField: "Content-Type")
@@ -106,7 +106,7 @@ class ThirdWalkThroughController: UIViewController {
                         OperationQueue.main.addOperation
                             {
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                                let viewController = storyboard.instantiateViewController(withIdentifier : self.linkedAllApplicationsStoryBoardID) as! LinkedApplicationsController
+                                let viewController = storyboard.instantiateViewController(withIdentifier : self.LINKED_ALL_APPLICATIONS_STORYBOARD_ID) as! LinkedApplicationsController
                                 self.present(viewController, animated: true)
                                 
                         }

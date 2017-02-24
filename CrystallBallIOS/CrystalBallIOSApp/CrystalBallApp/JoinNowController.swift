@@ -13,9 +13,8 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBOutlet weak var selectApplication: UITextField!
     @IBOutlet weak var signInBtn: UIButton!
     @IBOutlet weak var dropDown: UIPickerView!
-    let linkedApplicationsURL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/getAllApplications"
-    var signInStoryBoardID = "SignInID"
-    //var list = ["1", "2", "3"]
+    let LINKED_APPLICATIONS_URL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/getAllApplications"
+    let SIGN_IN_STORYBOARD_ID = "SignInID"
     var firstApplication: String?
     var secondApplication: String?
     var thirdApplication: String?
@@ -41,7 +40,7 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
         OperationQueue.main.addOperation
             {
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
-                let viewController = storyboard.instantiateViewController(withIdentifier : self.signInStoryBoardID) as! LoginController
+                let viewController = storyboard.instantiateViewController(withIdentifier : self.SIGN_IN_STORYBOARD_ID) as! LoginController
                 self.present(viewController, animated: true)
                 
         }
@@ -51,7 +50,7 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     // Web Services to get all applications
     func getAllCrystalBallLinkedApplications(){
-        var request = URLRequest(url: URL(string: linkedApplicationsURL)!)
+        var request = URLRequest(url: URL(string: LINKED_APPLICATIONS_URL)!)
         request.httpMethod = "POST"
         let postString = " "
         request.httpBody = postString.data(using: .utf8)

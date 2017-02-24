@@ -19,6 +19,8 @@
 		3271966D1E5D92FC00C34B67 /* FirstWalkThroughController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3271966C1E5D92FC00C34B67 /* FirstWalkThroughController.swift */; };
 		3271966F1E5D931000C34B67 /* SecondWalkThroughController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3271966E1E5D931000C34B67 /* SecondWalkThroughController.swift */; };
 		327196711E5D932100C34B67 /* ThirdWalkThroughController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327196701E5D932100C34B67 /* ThirdWalkThroughController.swift */; };
+		327196731E5EEBD700C34B67 /* CrystalBallAppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327196721E5EEBD700C34B67 /* CrystalBallAppConstants.swift */; };
+		328002761E6048FB00E234C8 /* IPSettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 328002751E6048FB00E234C8 /* IPSettingsController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		3271966C1E5D92FC00C34B67 /* FirstWalkThroughController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirstWalkThroughController.swift; sourceTree = "<group>"; };
 		3271966E1E5D931000C34B67 /* SecondWalkThroughController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SecondWalkThroughController.swift; sourceTree = "<group>"; };
 		327196701E5D932100C34B67 /* ThirdWalkThroughController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThirdWalkThroughController.swift; sourceTree = "<group>"; };
+		327196721E5EEBD700C34B67 /* CrystalBallAppConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CrystalBallAppConstants.swift; sourceTree = "<group>"; };
+		328002751E6048FB00E234C8 /* IPSettingsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPSettingsController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +85,8 @@
 				3271966C1E5D92FC00C34B67 /* FirstWalkThroughController.swift */,
 				3271966E1E5D931000C34B67 /* SecondWalkThroughController.swift */,
 				327196701E5D932100C34B67 /* ThirdWalkThroughController.swift */,
+				327196721E5EEBD700C34B67 /* CrystalBallAppConstants.swift */,
+				328002751E6048FB00E234C8 /* IPSettingsController.swift */,
 			);
 			path = CrystalBallApp;
 			sourceTree = "<group>";
@@ -162,10 +168,12 @@
 				3271965F1E5AAB0000C34B67 /* JoinNowController.swift in Sources */,
 				3271966D1E5D92FC00C34B67 /* FirstWalkThroughController.swift in Sources */,
 				3271964D1E5459DE00C34B67 /* CrystalBallApp.xcdatamodeld in Sources */,
+				328002761E6048FB00E234C8 /* IPSettingsController.swift in Sources */,
 				3271966F1E5D931000C34B67 /* SecondWalkThroughController.swift in Sources */,
 				327196611E5AF96900C34B67 /* RemoteAPI.swift in Sources */,
 				327196471E5459DE00C34B67 /* LoginController.swift in Sources */,
 				327196451E5459DE00C34B67 /* AppDelegate.swift in Sources */,
+				327196731E5EEBD700C34B67 /* CrystalBallAppConstants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
