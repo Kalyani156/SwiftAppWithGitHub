@@ -7,13 +7,12 @@
 //
 
 import UIKit
-
+import CoreData
 class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextFieldDelegate  {
     
     
     @IBOutlet weak var email: UITextField!
-    
-    
+     
     @IBOutlet weak var mobileNo: UITextField!
     
     @IBOutlet weak var password: UITextField!
@@ -21,12 +20,14 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     @IBOutlet weak var emailLabel: UILabel!
     
     @IBOutlet weak var mobileNoLabel: UILabel!
-     
+    
     @IBOutlet weak var passwordLabel: UILabel!
     
-     let REGISTER_USER_URL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/registerUser"
+    let REGISTER_USER_URL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/registerUser"
     
-     let JOIN_NOW_SUCCESS_STORYBOARD_ID = "JoinNowSuccessID"
+    let JOIN_NOW_SUCCESS_STORYBOARD_ID = "JoinNowSuccessID"
+    
+    var userEntryNumber : Int32 = 0
     
     @IBOutlet weak var selectApplication: UITextField!
     @IBOutlet weak var signInBtn: UIButton!
@@ -159,8 +160,22 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
     
     
     @IBAction func joinNowBtnPressed(_ sender: Any) {
+        
+         userEntryNumber = userEntryNumber + 1
+        // save received post data into database
+         let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
+        let userDetails = CBUser (context: context)
+         userDetails.entryNumber = self.userEntryNumber
+        userDetails.cbUsername = email.text!
+        userDetails.applicationName = self.selectApplication.text!
+        
+        // save the data to coredata
+        (UIApplication.shared.delegate as! AppDelegate).saveContext()
+        
         // ----------------POST REQUEST---------------------
         
+       // let loginController = LoginController()
         print("\(email.text!)")
         print("\(mobileNo.text!)")
         if email.text! == ""  {
@@ -180,7 +195,7 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
             emailLabel.text = ""
             mobileNoLabel.text = ""
             passwordLabel.text = ""
-            let jsonLoginParams = ["username":"\(email.text!)" , "mobileno":"\(mobileNo.text!)"]
+            let jsonLoginParams = ["email":"\(email.text!)" , "mobileNo":"\(mobileNo.text!)" ,  "password":"\(password.text!)"]
             let jsonData = try! JSONSerialization.data(withJSONObject: jsonLoginParams, options: .prettyPrinted)
             var request = URLRequest(url: URL(string: REGISTER_USER_URL)!)
             request.httpMethod = "POST"
@@ -203,9 +218,13 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                 if let httpResponse = response as? HTTPURLResponse {
                     print("status code@@@@@@@@@@@@@-------------\(httpResponse.statusCode)")
                     let statusCode = httpResponse.statusCode
+                    // Check IP Status
+                   // if loginController.checkIPStatus()
+                   // {
+                    
                     if(statusCode == 201)
                     {
-                        
+                       //  let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
                         OperationQueue.main.addOperation
                             {
                                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -223,7 +242,7 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                     {
                         OperationQueue.main.addOperation
                             {
-                                let ipAddressAlert = UIAlertController(title: "", message: "Could not connect to the server. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
+                                let ipAddressAlert = UIAlertController(title: "", message: "User already exist", preferredStyle: UIAlertControllerStyle.alert)
                                 ipAddressAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                                 // change background color.
                                 let FirstSubview = ipAddressAlert.view.subviews.first
@@ -236,7 +255,7 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                                     subview.layer.borderColor = UIColor(red: 0.1098, green: 0.2863, blue: 0.4431, alpha: 1.0).cgColor
                                 }
                                 //change message color
-                                let myString  = "Could not connect to the server. Please try again."
+                                let myString  = "User already exist"
                                 var myMutableString = NSMutableAttributedString()
                                 myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 12.0)!])
                                 myMutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.white, range: NSRange(location:0,length:myString.characters.count))
@@ -244,11 +263,37 @@ class JoinNowController: UIViewController, UIPickerViewDelegate, UIPickerViewDat
                                 self.present(ipAddressAlert, animated: true, completion: nil)
                         }
                     }
-                }
+                    }
+//                    else
+//                    {
+//                        OperationQueue.main.addOperation
+//                            {
+//                                let ipAddressAlert = UIAlertController(title: "", message: "Could not connect to the server. Please try again.", preferredStyle: UIAlertControllerStyle.alert)
+//                                ipAddressAlert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+//                                // change background color.
+//                                let FirstSubview = ipAddressAlert.view.subviews.first
+//                                let AlertContentView = FirstSubview?.subviews.first
+//                                for subview in (AlertContentView?.subviews)! {
+//                                    subview.backgroundColor = UIColor(red: 0.1098, green: 0.2863, blue: 0.4431, alpha: 1.0)
+//                                    subview.layer.cornerRadius = 10
+//                                    subview.alpha = 1
+//                                    subview.layer.borderWidth = 1
+//                                    subview.layer.borderColor = UIColor(red: 0.1098, green: 0.2863, blue: 0.4431, alpha: 1.0).cgColor
+//                                }
+//                                //change message color
+//                                let myString  = "Could not connect to the server. Please try again."
+//                                var myMutableString = NSMutableAttributedString()
+//                                myMutableString = NSMutableAttributedString(string: myString as String, attributes: [NSFontAttributeName:UIFont(name: "Georgia", size: 12.0)!])
+//                                myMutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.white, range: NSRange(location:0,length:myString.characters.count))
+//                                ipAddressAlert.setValue(myMutableString, forKey: "attributedMessage")
+//                                self.present(ipAddressAlert, animated: true, completion: nil)
+//                        }
+//                      }
+               // }
             }
             task.resume()
         }
-
+        
         
     }
     

@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import CoreData
 
 class LoginController: UIViewController {
     
@@ -21,6 +21,7 @@ class LoginController: UIViewController {
     
     
     @IBOutlet weak var passwordLabel: UILabel!
+    
     
     let VERIFY_CREDENTIALS_URL = "http://10.0.1.210:8080/MaasOauthServer/rest/oauth/verifyCredentials"
     
@@ -42,6 +43,8 @@ class LoginController: UIViewController {
     
     var selectedApplicationInSignIn = ""
     
+     var cbUser: [CBUser] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("login ipaddress--\(ipAddress)")
@@ -59,6 +62,16 @@ class LoginController: UIViewController {
                 
         }
     }
+    func checkIPStatus() -> Bool
+    {
+        var ipStatus: Bool? = false
+        if self.ipAddress == self.HOST_SERVER_IP , self.portNo == self.HOST_SERVER_PORT
+        {
+            ipStatus = true
+        }
+        
+        return ipStatus!
+    }
     
     @IBAction func arrowBtnPressed(_ sender: Any) {
         OperationQueue.main.addOperation
@@ -75,7 +88,9 @@ class LoginController: UIViewController {
     
     @IBAction func signInBtnPressed(_ sender: Any) {
         // ----------------POST REQUEST---------------------
-        
+     
+      let userNameFromCoreData = getUserNameFromCoreData(loginUser: userName.text!)
+    
         print("\(userName.text!)")
         print("\(password.text!)")
         if userName.text! == ""  {
@@ -101,6 +116,11 @@ class LoginController: UIViewController {
                     print("error=\(error)")
                     return
                 }
+                ///Convert data into JSON format
+                var jsonObject : [Any]?
+                 jsonObject = try! JSONSerialization.jsonObject(with: data) as? [Any]
+                
+                
                 
                 if let httpStatus = response as? HTTPURLResponse, httpStatus.statusCode != 200 {           // check for http errors
                     print("statusCode should be 200, but is \(httpStatus.statusCode)")
@@ -119,11 +139,41 @@ class LoginController: UIViewController {
                         self.portNo = self.HOST_SERVER_PORT
                     }
                     print("ip \( self.ipAddress)")
-                       print("port \( self.portNo)")
-                    if self.ipAddress == self.HOST_SERVER_IP , self.portNo == self.HOST_SERVER_PORT
+                    print("port \( self.portNo)")
+                    if self.checkIPStatus()
                     {
                         if(statusCode == 201)
                         {
+                   
+                            if userNameFromCoreData != self.userName.text!
+                            {
+                            // receive data after web service call
+                            if let jsonDict = jsonObject?.first as? [String:Any] {
+                                
+                                if let applicationName = jsonDict["applicationName"] as?  String {
+                                    
+                                    print("app----\(applicationName)")
+                                    // save received post data into database
+                                    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+                                    
+                                    let userDetails = CBUser (context: context)
+                                    userDetails.cbUsername = self.userName.text!
+                                    userDetails.applicationName = applicationName
+                                    
+                                    // save the data to coredata
+                                   
+                                    (UIApplication.shared.delegate as! AppDelegate).saveContext()
+                                    }
+                                }
+                                    
+                                else{
+                                    print("error in converting data into  json")
+                                }
+                            }
+                 
+                           
+                            
+                          
                             
                             OperationQueue.main.addOperation
                                 {
@@ -160,12 +210,12 @@ class LoginController: UIViewController {
                                     myMutableString.addAttribute(NSForegroundColorAttributeName, value: UIColor.white, range: NSRange(location:0,length:myString.characters.count))
                                     alert.setValue(myMutableString, forKey: "attributedMessage")
                                     self.present(alert, animated: true, completion: nil)
-                                   
+                                    
                             }
                         }
                     }
-                    
-                    //
+                        
+                        //
                     else
                     {
                         OperationQueue.main.addOperation
@@ -190,13 +240,41 @@ class LoginController: UIViewController {
                                 ipAddressAlert.setValue(myMutableString, forKey: "attributedMessage")
                                 self.present(ipAddressAlert, animated: true, completion: nil)
                         }
-
-                       
+                        
+                        
                     }
                 }
             }
             task.resume()
         }
+    }
+    func getUserNameFromCoreData(loginUser : String) -> String
+    {
+        var username : String = ""
+        let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        do
+        {
+            let request : NSFetchRequest<CBUser> = CBUser.fetchRequest()
+          
+            let dataPredicate = NSPredicate(format: "cbUsername == %@", loginUser)
+            
+           
+            request.predicate = dataPredicate
+            
+            cbUser  = try context.fetch(request)
+            
+            for userDetails in cbUser as [NSManagedObject] {
+                //get the Key Value pairs (although there may be a better way to do that...
+                username = userDetails.value(forKey: "cbUsername") as! String
+               
+            }
+            
+        }
+        catch
+        {
+            print("Fetching user name failed")
+        }
+        return username
     }
 }
 
